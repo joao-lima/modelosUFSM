@@ -1,0 +1,238 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[portuges]{babel}
+\usepackage{times}
+\usepackage{indentfirst}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage[numbers,sort]{natbib}
+
+\title{
+        {\small
+        {Universidade Federal de Santa Maria} \hfill
+        {Curso de Ciência da Computação} \\
+        \vskip -4mm
+        Centro de Tecnologia \hfill
+        Núcleo de Ciência da Computação
+        }\\~\\
+        {Relatório de atividade}\\[4mm]
+        {\large \sc Estágio: \textbf{Administração da Rede do NCC}}
+        \\[4mm]
+        {\large Período: \textbf{agosto/2005 - outubro/2006}}
+}
+
+\author{
+        {Nome: \textbf{João Vicente Lima}}\ \
+        {Matrícula: \textbf{2310144}}\\
+        {Orientador: \textbf{Prof.\ Benhur de Oliveira Stein}}\\
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introdução}
+
+Este relatório tem por objetivo descrever de forma sucinta os trabalhos
+desenvolvidos pelo estagiário, desde agosto de 2005, até a presente data,
+outubro de 2006.
+
+As próximas seções apresentam as principais atividades desenvolvidas e uma
+breve descrição do trabalho desenvolvido em cada uma destas atividades.
+
+\section{Manutenção dos Servidores da Rede}
+
+Desde agosto de 2005 foram realizadas várias instalações e migrações
+de serviços dos principais servidores da rede. No princípio, foram
+feitos estudos encima do estado em que a rede se encontrava,
+como identificação e entendimento dos principais serviços. Neste fase
+foi possível identificar serviços essenciais da rede como o servidor
+de nomes de domínio (DNS\footnote{Domain Name Server})
+\cite{dnsr,dnshowto,dnsstuff,iscbind} e de nomes de grupos de
+usuários (LDAP\footnote{Lightweight Directory Access Protocol})
+\cite {openldap,ldapbrasil}.
+Após este
+período foi feito uma análise, junto com o orientador deste estágio, sobre
+melhorias e atualização dos serviços existentes.
+
+A medida que os servidores e serviços eram definidos, passávamos para
+a fase de migração. Esta fase foi acelerada quando na segunda metade
+deste ano um dos principais servidores teve problemas com disco. Assim
+tivemos a necessidade de elimina-lo do quadro de servidores e passar
+os serviços existentes deste para outros com uma carga menor de
+trabalho.
+
+Ocasionalmente, ocorriam casos em que peças dos mesmos precisavam ser
+trocadas. Podemos citar como exemplo um dos servidores necessitou a
+troca da fonte de alimentação no dia 30 de outubro,
+devido a uma queda de luz que ocorreu no domingo, 29 de outubro.
+
+\section{Manutenção do Sistema Integrado}
+
+O NCC possui um gerenciamento centralizado dos serviços DNS, DHCP e
+NFS\footnote{Network File System} \cite{nfshowto} de forma simples e
+prática conforme \cite{sistemancc}, que utiliza \textit{shell scripts}
+~\cite{advancedbash} e \textit{makefiles}~\cite{gnumake}. 
+Este sistema depende da
+localização dos serviços nos servidores para ter acesso aos arquivos
+de configuração. Dessa forma, a cada migração de servidores e serviços
+é necessária a manutenção deste sistema. Assim como sua utilização
+para o cadastro e alteração dos computadores que compõem a rede.
+
+\section{Manutenção do Gerenciamento e Cadastro de Usuários}
+
+Num primeiro momento, foi preciso entender como a autenticação era
+efetuada no NCC com LDAP, SAMBA \cite{samba} e \textit{email}.
+Após foi realizado um estudo de como o
+sistema de controle gerenciava estes usuários, como os criava e
+alterava. Com estes dados foi realizado uma reescrita de algumas
+partes deste sistema, para atender as necessidades atuais
+e para facilitar futuras alterações, principalmente no que diz
+respeito aos acessos ao serviço LDAP.
+
+\section{Manutenção e Controle de Sistemas Operacionais}
+
+Para entender o sistema de carregamento dos sistemas operacionais dos
+laboratórios do NCC foi preciso estudar o \textit{Remote Boot}
+~\cite{remoteboot} com o intuito de dar continuidade ao melhoramento
+deste sistema. Todavia, ele mostrou-se muito limitado para as novas
+versões de sistemas operacionais como \textit{Linux}~\cite{linuxkernel}
+e o \textit{Windows}~\cite{windows}, pois não foi mantido com novas
+versões e atualizações. Assim foi procurado alternativas simples que
+proporcionem a instalação das últimas versões dos programas
+disponíveis.
+
+Uma delas baseou-se em ferramentas oferecidas pelo sistemas
+\textit{Linux} com o SYSLINUX~\cite{syslinux} e o
+NFSRoot~\cite{nfsroot}. Primeiramente o SYSLINUX oferece o
+\textit{pxelinux} que é possível iniciar um computador através da rede
+e mostrar um menu simples com algumas opções sobre o \textit{kernel}
+do sistema operacional \textit{Linux} que se deseja carregar. Depois
+da escolha usa-se o \textit{NFSRoot} que permite montar o sistema de
+arquivos remotamente, sem a necessidade de acesso aos disco da
+máquina. Com este sistema totalmente remoto, é possível manter um
+mecanismo de recuperação dos computadores sem a intervenção direta dos
+administradores.
+
+Para tanto, primeiro criou-se uma instalação completa de um sistema
+\textit{GNU/Linux} em um servidor. Logo em seguida, criou-se o sistema
+carregado remotamente com \textit{shell scripts} que executam a tarefa
+de instalação dos arquivos do sistema completo no disco local e
+construir uma instalação completa automaticamente. As dificuldades
+encontradas nesta contrução foram o estudo do SYSLINUX e sua forma
+de funcionamento,
+e também a criação de um sistema que executasse remotamente baseada em
+uma instalação tradicional. Atualmente este sistema de atualização é
+aplicado em cerca de nove computadores do NCC.
+
+A outra solução, que foi proposta pelo orientador deste estágio, é a
+utilização do LTSP\footnote{Linux Terminal Server Project}
+~\cite{ltsp,ltspgentoo}
+para a
+criação de terminais remotos sem a necessidade de discos de
+armazenamento. Esta alternativa surgiu de dois problemas enfrentados
+que eram a falta de recursos para novos computadores, e as
+dificuldades de manter sistemas independentes em cada um deles. Hoje
+em dia, o LTSP está em testes no NCC e é utilizado por sete
+computadores que estão sem discos.
+
+\section{Novo Sistema de Quotas de Impressão}
+
+Um  novo sistema de quotas de impressão foi instalado no NCC, chamado
+de Pykota~\cite{pykota}. Através dele é possível ter controle
+dos usuários que utilizam a impressora, assim como gerenciar o número
+de folhas que cada um consome por documento impresso. Este sistema
+também permite estabelecer os preços por folha impressa e armazena o
+quanto cada usuário tem direito a imprimir. O Pykota oferece vários
+aplicativos de controle de usuários, impressoras e quotas. No NCC
+usamos o MySQL~\cite{mysql,mysqlgentoo} para o armazenamento dessas
+informações, e \textit{shell scripts} para facilitar o controle dos
+usuários no sistema.
+
+\section{Virtualização de Serviços}
+
+Ultimamente, uma forte tendência foi virtualizar serviços através do
+XEN~\cite{xen,xengentoo} a fim de
+permitir flexibilidade na administração, o que possibilita sistemas
+específicos para os propósitos de cada serviço.  Esta tarefa foi a mais
+complicada deste estágio, pois foi aplicado todos os conhecimentos
+adquiridos com os trabalhos anteriores anteriores,
+como configuração de serviços básicos,
+configuração e alteração do núcleo do sistema XEN, entre outras.
+
+Um exemplo é o servidor SSH\footnote{Security Shell
+Client}~\cite{ssh} utilizado pelo NCC para acesso externo de seus
+usuário a rede local. Este sistema deve ser bem reduzido, além de
+manter a privacidade entre os usuários que o compartilham. Dessa forma,
+o sistema virtual foi montado conforme as exigências sem
+necessitar de um computador próprio para esta tarefa. Atualmente
+tem-se outro sistema virtual, com DNS e DHCP, que executa
+concorrentemente com o
+anterior. Neste último é desnecessário ter as limitações que o serviço
+de SSH externo requer. Assim ambos executam em ambientes distintos e
+sem interferir um no outro.
+
+Uma considerável vantagem de um sistema virtual é a possibilidade de
+experimentos para aumento da segurança. Para o serviço externo SSH,
+criou-se um \textit{patch} para o \textit{kernel} XEN versão 2.6.16.28, que
+esconde os processos de outros usuários e do sistema caso o usuário não
+tenha permissões de administrador. Além disso, esta modificação elimina
+qualquer característica que identifique o sistema em execução é
+uma máquina virtual XEN, como
+versão e informações contidas na pasta de sistema \textit{/proc}.
+Este \textit{patch} foi baseado em parte pelo projeto
+GRSecurity~\cite{grsec}.
+
+\section{Verificação, Diagnóstico e Conserto de Máquinas}
+
+Para a manutenção do bom funcionamento é necessário uma verificação
+constante dos equipamentos.
+Esta verificação consiste basicamente numa tarefa diária de 
+inicialização e
+visualização do funcionamento ou não de todos os computadores que fazem
+parte dos laboratórios temáticos.
+
+No caso de alguma máquina apresentar alguma anormalidade durante o 
+processo 
+de carga e inicialização do sistema é feito um diagnóstico para
+identificar
+o ponto de falha e sanar o problema.
+Este processo muitas vezes leva a uma checagem dos componentes físicos da
+máquina.
+A máquina é aberta e são testados componentes como placa de rede, memória,
+processador, disco, placa mãe e fonte de alimentação.
+São testadas todas as possibilidades até que a origem da falha de operação
+seja detectado.
+Se for problema em algum dos dispositivos físicos da máquina, é feita a
+troca do mesmo.
+
+As falhas e consertos de dispositivos físicos das máquinas ocorrem com 
+uma freqüência menor que a atualização e instalação de 
+programas/aplicativos, por exemplo.
+Contudo, é gasto um tempo considerável quando da ocorrência de problemas
+deste gênero.
+
+\section{Conclusão}
+
+A tarefa de administração de uma rede de computadores requer uma grande 
+disponibilidade de tempo e recursos humanos.
+A automatização de muitas das tarefas atribuídas aos administradores
+facilita e agiliza o processo.
+
+Desde 2005, mesmo com alguma experiência em ambientes
+\textit{GNU/Linux}, foram incansáveis horas de aprendizado e trabalho.
+Mesmo com a falta de recursos e descaso com os equipamentos dos
+administradores do NCC, foi possível ter uma experiência fenomenal.
+Sem contar a assistência a usuários do laboratório que muitas vezes
+tinham pouco convívio com ambientes de rede e com a forma de
+utilização dos recursos do NCC.
+
+Este relatório teve como objetivo apresentar brevemente as principais
+atividades desenvolvidas pelo estagiário durante o período referido.
+
+\bibliographystyle{plainnat}
+\bibliography{referencias}
+
+\end{document}
