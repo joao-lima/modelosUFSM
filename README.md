@@ -1,2 +1,3 @@
 # modelosUFSM
-Modelos usados na Informática/UFSM.
+Modelos de relatórios/projetos usados na Informática da UFSM.
+
